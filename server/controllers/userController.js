@@ -187,8 +187,8 @@ export const sendConnectionRequest = async (req,res)=>{
         // Check if users are already connected
         const connection = await Connection.findOne({
             $or:[
-                {rom_user_id:userId,to_user_id:id},
-                {rom_user_id:id,to_user_id:userId},
+                {from_user_id:userId,to_user_id:id},
+                {from_user_id:id,to_user_id:userId},
                 // agar koi error hua toh iska matlab mene yahan from ki jagah rom likha hai
                 // and this is just my speculation not confirmed now coz the creator can have a different meaning
             ]
@@ -273,7 +273,7 @@ export const acceptConnectionRequest = async (req,res)=>{
 // Get User Profiles
 export const getUserProfiles = async (req,res) => {
     try {
-        const {profileId}=req.body();
+        const {profileId}=req.body;
         const profile = await User.findById(profileId)
         if(!profile){
             return res.json({success:false,message:"Profile not found"});
@@ -282,6 +282,6 @@ export const getUserProfiles = async (req,res) => {
         res.json({success:true,profile,posts});
     } catch (error) {
         console.log(error);
-        res.join({success:false,message:error.message})
+        res.json({success:false,message:error.message})
     }
 }
